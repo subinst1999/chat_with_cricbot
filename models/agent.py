@@ -60,11 +60,11 @@ def query_as_list(db, query):
     return list(set(res))
 
 
-players = query_as_list(db, "SELECT DISTINCT player_name FROM Players")
-teams = query_as_list(db, "SELECT DISTINCT team_name FROM Players")
+players = query_as_list(db, "SELECT DISTINCT player_name FROM players")
+teams = query_as_list(db, "SELECT DISTINCT team_name FROM players")
 events = query_as_list(db, "SELECT DISTINCT event_name FROM Events")
-officials = query_as_list(db, "SELECT DISTINCT official_name FROM Officials")
-match_types = query_as_list(db, "SELECT DISTINCT match_type FROM Game_meta")
+officials = query_as_list(db, "SELECT DISTINCT official_name FROM match_officials")
+match_types = query_as_list(db, "SELECT DISTINCT match_type FROM match_statistics")
 
 text_data = {'players':players,'teams':teams,'events':events,'officials':officials,'match_types':match_types }
 retriever = {}
@@ -88,11 +88,11 @@ for k,v in text_data.items():
 # Add to system message
 table_description = (
     "Description of each table is given below:"
-    "1: Players: Details about players and their statics in a match.Use this stable for getting overall statitics of a player in a match"
+    "1: players: Details about players and their statics in a match.Use this stable for getting overall statitics of a player in a match"
     "2. Deliveries: Table contains information about deliveries. Each row has information about single delivery in a match"
     "3. Events: contain event information"
-    "4. Game_meta: Overall information of a game"
-    "5. Officials: details about officials"
+    "4. match_statistics: Overall information of a game"
+    "5. match_officials: details about officials"
 )
 suffix = (
     "If you need to filter on a proper noun like a Name, you must ALWAYS first look up "
@@ -103,7 +103,7 @@ suffix = (
 )
 
 conditions = ("Follow below conditions while constructing query:"
-              "1. Use colums 'match_start_date' 'match_end_date' in Game_meta table for queries related to dates"
+              "1. Use colums 'match_start_date' 'match_end_date' in match_statistics table for queries related to dates"
               "2. In Deliveries table, runs_on_delivery_by_batter and runs_on_delivery are runs on a single delivery. You need to do suitable aggregation on this field to find total runs"
               "3. Don't use match_id field to infer year, event etc."
               f"4. Current date is: {datetime.datetime.today()}. Use this date as reference for date related queries."
