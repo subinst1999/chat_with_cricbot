@@ -28,7 +28,7 @@ def login():
 
 @app.route('/')
 def login_page():
-    return render_template('login.html')
+    return render_template('dashboard.html')
 
 @app.route('/query', methods=['POST'])
 def query():
